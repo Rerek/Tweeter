@@ -55,17 +55,29 @@ class Message{
     }
     static public function loadAllReceivedMessages($id){
         $ret = [];
-        $sql = "SELECT * FROM Messages, Users WHERE Messages.send_id=Users.id AND receive_id = $id ORDER BY dataWyslania DESC";
+        $sql = "SELECT Messages.id, Messages.send_id, Messages.receive_id, Messages.text, Messages.dataWyslania, Messages.przeczytana, Users.name FROM Messages, Users WHERE Messages.send_id=Users.id AND receive_id = $id ORDER BY dataWyslania DESC";
         $result = self::$connection->query($sql);
         if($result !== false) {
             if($result->num_rows>0) {
                 while($row = $result->fetch_assoc()){
-                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['text'], $row['dataWyslania'], $row['przeczytana']);
+                    $message = new Message($row['id'], $row['name'], $row['receive_id'], $row['text'], $row['dataWyslania'], $row['przeczytana']);
                     $ret[] = $message;
                 }
             }
         }
         return $ret;
+    }
+    static public function getMessageById($id){
+        $sql = "SELECT Messages.id, Messages.send_id, Messages.receive_id, Messages.text, Messages.dataWyslania, Messages.przeczytana FROM Messages, Users WHERE Messages.send_id=Users.id AND Messages.id = $id ORDER BY dataWyslania DESC";        //tworze zapytanie do bazy danych
+        $result = self::$connection->query($sql);
+        if($result !== false) {
+            if ($result->num_rows === 1) {
+                $row = $result->fetch_assoc();
+                $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['text'], $row['dataWyslania'], $row['przeczytana']);
+                return $message;
+            }
+        }
+        return false;
     }
 
     public function __construct($newId, $newSendId, $newReceiveId, $newText, $newDataWyslania, $newStatusPrzeczytania){
@@ -116,6 +128,14 @@ class Message{
         }else{
             return $this->text;
         }
+    }
+    public function saveToDB(){
+        $sql = "UPDATE Messages SET przeczytana=('$this->setStatusPrzeczytani()') WHERE id = $this->id";
+        $result = self::$connection->query($sql);
+        if ($result === True){
+            return True;
+        }
+        return FALSE;
     }
 
 }

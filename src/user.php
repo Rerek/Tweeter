@@ -52,6 +52,22 @@ class User{
         }
         return false;
     }
+    static public function CheckPass($id, $password){
+        $sql = "SELECT * FROM Users WHERE id LIKE '$id'";         //zapytanie do bazy danych
+        $result = self::$connection->query($sql);                       //wysłanie zapytania
+        if ($result !== False){
+            if($result->num_rows === 1){                                //sprawdzenie, czy zwrócony jest dokładnie jeden rekord, czyli jeden użytkownik
+                $row = $result->fetch_assoc();
+                $isPasswordOk = password_verify($password, $row['password']);
+                                                                                    //sprawdzenie hasla
+                if($isPasswordOk=== true){
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     static public function getUserById($id){
         $sql = "SELECT * FROM Users WHERE id = $id";        //tworze zapytanie do bazy danych
         $result = self::$connection->query($sql);
@@ -77,6 +93,22 @@ class User{
             }
         }
         return $ret;
+    }
+    static public function NewPass($id, $password1, $password2){
+        if($password1 !== $password2){
+            return false;
+        }
+        $options = [                                        //haszowanie hasła start
+            'cost' => 11,
+            'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
+        ];
+        $hassedPassword = password_hash($password1, PASSWORD_BCRYPT, $options); // haszowanie hasła stop
+
+        $sql = "UPDATE Users SET password='$hassedPassword' WHERE id = $id";
+        $result = self::$connection->query($sql);
+        if($result !== true){
+            return false;
+        }
     }
 
 

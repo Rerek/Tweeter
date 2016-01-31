@@ -5,6 +5,8 @@ require_once ("./src/connectPHP.php");
 if(!isset($_SESSION['userID'])){
     header("Location:login.php");
 }
+echo("<a href='logout.php'>Wyloguj</a><br>");
+echo("<a href='main.php'>Main</a><br>");
 
 $user = User::getUserById($_SESSION['userID']);
 

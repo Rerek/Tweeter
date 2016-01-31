@@ -13,7 +13,8 @@ echo ("<h1>Jestes zalogowany jako: {$user->getName()}</h1>");
 echo("<a href='logout.php'>Wyloguj</a><br>");
 echo("<a href='wiadomosciOdebrane.php'>Wiadomosci odebrane</a><br>");
 echo("<a href='wiadomosciWyslane.php'>Wiadomosci wyslane</a><br>");
-echo("<a href='showAllUsers.php'>Pokaz wszystkich uzytkownikow</a><br><br>");
+echo("<a href='showAllUsers.php'>Pokaz wszystkich uzytkownikow</a><br>");
+echo("<a href='edycja.php'>Edytuj profil</a><br><br>");
 
 ?>
 
@@ -32,8 +33,11 @@ echo("<a href='showAllUsers.php'>Pokaz wszystkich uzytkownikow</a><br><br>");
 <?php
 $allTweets = $user->loadAllTweets();
 foreach($allTweets as $tweetsToShow){
-    echo("<h2>{$tweetsToShow->getText()}</h2><br>");
+    echo("<hr>");
+    echo("{$tweetsToShow->getDataDodania()}");
+    echo("<h3>{$tweetsToShow->getText()}</h3>");
     echo("<a href='showTweet.php?tweetId={$tweetsToShow->getId()}'>Show</a><br>");
+
 }
 
 ?>
