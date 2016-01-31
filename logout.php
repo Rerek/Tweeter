@@ -1,7 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Rafal
- * Date: 2016-01-29
- * Time: 16:59
- */
+require_once ("./src/connectPHP.php");
+
+unset($_SESSION['userID']);
+header("Location:login.php");

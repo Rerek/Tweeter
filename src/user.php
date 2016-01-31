@@ -38,10 +38,10 @@ class User{
         return false;
     }
     static public function LogInUser($email, $password){
-        $sql = "SELECT * FROM Users WHERE email LIKE '$email'";
-        $result = self::$connection->query($sql);
+        $sql = "SELECT * FROM Users WHERE email LIKE '$email'";         //zapytanie do bazy danych
+        $result = self::$connection->query($sql);                       //wysłanie zapytania
         if ($result !== False){
-            if($result->num_rows === 1){
+            if($result->num_rows === 1){                                //sprawdzenie, czy zwrócony jest dokładnie jeden rekord, czyli jeden użytkownik
                 $row = $result->fetch_assoc();
                 $isPasswordOk = password_verify($password, $row['password']);  //sprawdzenie hasla
                 if($isPasswordOk=== true){
@@ -53,7 +53,7 @@ class User{
         return false;
     }
     static public function getUserById($id){
-        $sql = "SELECT * FROM Users WHERE id = $id";
+        $sql = "SELECT * FROM Users WHERE id = $id";        //tworze zapytanie do bazy danych
         $result = self::$connection->query($sql);
         if($result !== false) {
             if ($result->num_rows === 1) {
@@ -87,28 +87,28 @@ class User{
     private $description;
 
     public function __construct($newId, $newName, $newEmail, $newDescription){
-        $this->id = $newId;
+        $this->id = intval ($newId);
         $this->name = $newName;
         $this->email = $newEmail;
         $this->setDescription($newDescription);
     }
     public function getId(){
         return $this->id;
-    }
+    }           //zwraca id danego obiektu
     public function getName(){
         return $this->name;
-    }
+    }           //zwraca imie danego obiektu
     public function getEmail(){
         return $this->email;
-    }
+    }           //zwraca email danego obiektu
     public function getDescription(){
         return $this->description;
-    }
+    }       //zwraca opis danego obiektu
     public function setDescription($newDescription){
         if(is_string($newDescription)){
             $this->description=$newDescription;
         }
-    }
+    }       //dodaje nowy opis danego obiektu
     public function saveToDB(){
         $sql = "UPDATE Users SET description=('$this->description') WHERE id = $this->id";
         $result = self::$connection->query($sql);
@@ -116,16 +116,24 @@ class User{
             return True;
         }
         return FALSE;
-    }
+    }                           //zapisuje zmiany z setDescription do Bazy Danych
     public function loadAllTweets(){
         $ret = [];
-        // TODO: Finis this function
-        // TODO: ta funkcja powinna zwracać wszystkie tweety użytkownika (data DESC)
+        $sql = "SELECT * FROM Tweets WHERE user_id = ($this->id) ORDER BY addDate DESC";
+        $result = self::$connection->query($sql);
+        if($result !== false) {
+            if($result->num_rows>0) {
+                while($row = $result->fetch_assoc()){
+                    $tweet = new Tweet($row['id'], $row['user_id'], $row['text'], $row['addDate']);
+                    $ret[] = $tweet;
+                }
+            }
+        }
         return $ret;
     }
     public function loadAllSendMassages(){
         $ret = [];
-        // TODO: Finis this function
+        // TODO: Finish this function
         // TODO: ta funkcja powinna zwracać wszystkie wiadomości użytkownika (data DESC)
         return $ret;
     }
