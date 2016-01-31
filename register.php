@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST'){
         echo("zle dane rejestracji...");
     }
 }
-
 ?>
 
 

@@ -13,7 +13,6 @@ if (isset($_GET['messageId'])) {
 $message = Message::getMessageById($messageId);
 $message->setStatusPrzeczytania(0);
 $message->saveToDB();
-
 echo("{$message->getText()} <br>")
 
 ?>

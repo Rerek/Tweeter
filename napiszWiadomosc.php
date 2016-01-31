@@ -1,6 +1,6 @@
 <?php
 require_once("./src/connectPHP.php");
-if(!isset($_SESSION['userID'])){
+if (!isset($_SESSION['userID'])) {
     header("Location:login.php");
 }
 echo("<a href='logout.php'>Wyloguj</a><br>");
@@ -10,21 +10,12 @@ if (isset($_GET['userId'])) {
 } else {
     $userId = $_SESSION['userID'];
 }
-$userToShow = User::getUserById($userId);
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if(isset($_POST['wiadomosc']) && strlen($_POST['wiadomosc'])>3){
-        $wiadomka = Message::Create($_SESSION['userID'], $userToShow->getId(), $_POST['wiadomosc']);
-    }
-
-}
-
 
 
 $userToShow = User::getUserById($userId);
 
 if ($userToShow !== false) {
     echo("<h1>Uzytkownik: {$userToShow->getName()}</h1>");
-
     if ($userToShow->getId() !== $_SESSION['userID'] && $_SESSION['userID']) {
         echo("
 
@@ -36,10 +27,8 @@ if ($userToShow !== false) {
         </form>
         ");
     }
-
 } else {
     echo("Nie znaleziono takiego użytkownika");
 }
-
 
 ?>

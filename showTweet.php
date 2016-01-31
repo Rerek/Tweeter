@@ -12,7 +12,6 @@ if(isset($_GET['tweetId'])){
 $tweetToShow = Tweet::ShowTweet($tweetId);
 
 if($tweetToShow !== false) {
-
     echo("<h2>{$tweetToShow->getText()}</h2>");
     echo("ID Tweeta: {$tweetToShow->getId()}<br>");
     echo("Autor: {$tweetToShow->getIdUsera()}<br>");
@@ -34,7 +33,6 @@ $tweet = Tweet::getTweetById($_GET['tweetId']);
         <input type="text" name="trescKomentarza">
     </label>
     </br>
-
     <input type="submit">
 </form>
 
@@ -42,10 +40,9 @@ $tweet = Tweet::getTweetById($_GET['tweetId']);
 $allComments = Comment::loadAllComments($tweet->getId());
 echo ("<h2>Kmentarze:</h2>");
 foreach($allComments as $commentToShow){
-echo("<hr>");
-echo("<h4> {$commentToShow->getText()}</h4>");
-echo("Dodany przez uzytkownika: {$commentToShow->getIdUsera()}<br>");
-echo("Data dodania: {$commentToShow->getCreationDate()}<br>");
-
+    echo("<hr>");
+    echo("<h4> {$commentToShow->getText()}</h4>");
+    echo("Dodany przez uzytkownika: {$commentToShow->getIdUsera()}<br>");
+    echo("Data dodania: {$commentToShow->getCreationDate()}<br>");
 }
 ?>
