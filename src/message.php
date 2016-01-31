@@ -41,12 +41,12 @@ class Message{
     }
     static public function loadAllSendMessages($id){
         $ret = [];
-        $sql = "SELECT * FROM Messages, Users WHERE Messages.send_id=Users.id AND send_id = $id ORDER BY dataWyslania DESC";
+        $sql = "SELECT Messages.id, Messages.send_id, Messages.receive_id, Messages.text, Messages.dataWyslania, Messages.przeczytana, Users.name FROM Messages, Users WHERE Messages.receive_id=Users.id AND send_id = $id ORDER BY dataWyslania DESC";
         $result = self::$connection->query($sql);
         if($result !== false) {
             if($result->num_rows>0) {
                 while($row = $result->fetch_assoc()){
-                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['text'], $row['dataWyslania'], $row['przeczytana']);
+                    $message = new Message($row['id'], $row['send_id'], $row['name'], $row['text'], $row['dataWyslania'], $row['przeczytana']);
                     $ret[] = $message;
                 }
             }

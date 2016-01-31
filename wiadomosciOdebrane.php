@@ -23,7 +23,7 @@ foreach($messages as $messageToShow){
     }
 
     echo("Nadawca: {$messageToShow->getSendId()}<br>");
-    echo("<a href='showMessage.php?messageId={$messageToShow->getId()}'>Pokaz cala wiadomosc</a><br>");
+    echo("<a href='showMessage.php?messageId={$messageToShow->getId()}'>Pokaz Wiadomosc</a><br>");
 
 
 }
